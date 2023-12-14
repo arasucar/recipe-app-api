@@ -1,0 +1,26 @@
+---
+# Define the Action name
+name: Checks
+
+# Define the trigger
+on: [push]
+
+# Define the jobs
+jobs:
+  test-lint: # Job id shown on GitHub Actions
+    name: Test and Lint
+    runs-on: ubuntu-20.04
+    # Define steps
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          # Credentials in GitHub secrets
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Checkout # git checkout action
+        uses: actions/checkout@v2
+      - name: Test
+        run: docker-compose run --rm app sh -c "python manage.py test"
+      - name: Lint
+        run: docker-compose run --rm app sh -c "flake8"

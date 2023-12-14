@@ -1,0 +1,22 @@
+# Version of docker-compose syntax
+version: "3.9"
+
+# Main block could be one or more service blocks
+services:
+  # Name of our service
+  app:
+    # Build the docker container inside our current directory
+    build:
+      context: .
+      # For running docker-compose in dev mode
+      args:
+        - DEV=true
+    # Maps one of our ports to a containers port
+    ports:
+      - "8000:8000"
+    # Mapping dirs from our system into the docker container
+    volumes:
+      - "./app:/app"
+    # Command that is used to run the service
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
