@@ -14,5 +14,8 @@ docker-compose run --rm app sh -c "python manage.py test"
 # To start a new project named "app" inside app directory
 docker-compose run --rm app sh -c "django-admin startproject app ."
 
-# To run the project
+# To run the app
 docker-compose up
+
+# To clean up the containers
+docker-compose down

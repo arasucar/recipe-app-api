@@ -23,11 +23,18 @@ ARG DEV=false
 # Install dependancies as a new user
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
+    # To install psycopg2 postgresql adapter
+    apk add --update --no-cache postgresql-client &&  \
+    apk add --update --no-cache --virtual .tmp-build-deps  \
+      build-base postgresql-dev musl-dev &&  \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ];  \
       then /py/bin/pip install -r /tmp/requirements.dev.txt ;  \
     fi && \
+    # Remove temporary files
     rm -rf /tmp && \
+    # Remove unneeded postgresql installers
+    apk del .tmp-build-deps &&  \
     adduser \
         --disabled-password \
         --no-create-home \
